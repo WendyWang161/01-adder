@@ -12,7 +12,7 @@ module Language.Adder.Compiler ( compiler ) where
 import           Control.Arrow                   ((>>>))
 import           Text.Printf                     (printf)
 import           Prelude                 hiding (compare)
-import           Data.Maybe
+--import           Data.Maybe
 import           Language.Adder.Types
 import           Language.Adder.Parser     (parse)
 import           Language.Adder.Asm        (asm)
@@ -27,7 +27,7 @@ compiler f = parse f >>> compile >>> asm
 --------------------------------------------------------------------------------
 type Tag   = SourceSpan
 type AExp  = Expr Tag
-type ABind = Bind Tag
+--type ABind = Bind Tag
 
 instance Located Tag where
   sourceSpan x = x
@@ -42,16 +42,19 @@ compile e = compileEnv emptyEnv e ++ [IRet]
 --------------------------------------------------------------------------------
 compileEnv :: Env -> AExp -> [Instruction]
 --------------------------------------------------------------------------------
-compileEnv _   (Number n l)     = [ IMov (Reg EAX) (repr n) ]
-compileEnv env (Prim1 Add1 e l) = compileEnv env e 
+compileEnv _   (Number n _)     = [ IMov (Reg EAX) (repr n) ]
+compileEnv env (Prim1 Add1 e _) = compileEnv env e 
                                   ++ [ IAdd (Reg EAX) (Const 1) ]
-compileEnv env (Prim1 Sub1 e l) = compileEnv env e
+compileEnv env (Prim1 Sub1 e _) = compileEnv env e
                                   ++ [ IAdd (Reg EAX) (Const (-1)) ]
 compileEnv env (Id x l)         = [ IMov (Reg EAX) (RegOffset i ESP) ]
                                   where
-                                    i = fromMaybe err (lookupEnv x env)
-                                    err = error (printf "Error: Variable '%s' is unbound" x)
-compileEnv env (Let x e1 e2 l)  = compileEnv env e1
+                                    i = case (lookupEnv x env) of
+                                        Just a     -> a
+                                        Nothing    -> panic (printf "Error: Variable '%s' is unbound" x) l
+                                    --i = fromMaybe err (lookupEnv x env)
+                                    --err = error (printf "Error: Variable '%s' is unbound" x)
+compileEnv env (Let x e1 e2 _)  = compileEnv env e1
                                   ++ IMov (RegOffset i ESP) (Reg EAX)
                                   : compileEnv env' e2
                                   where
