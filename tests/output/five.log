@@ -1,7 +1,0 @@
-make[1]: Entering directory `/home/linux/ieng6/oce/9o/zhw161/cs131/01/01-adder'
-stack exec -- adder tests/input/five.adder > tests/output/five.s
-nasm -f aout -o tests/output/five.o tests/output/five.s
-clang  -g -m32 -o tests/output/five.run c-bits/main.c tests/output/five.o
-tests/output/five.run > tests/output/five.result
-rm tests/output/five.o tests/output/five.s tests/output/five.run
-make[1]: Leaving directory `/home/linux/ieng6/oce/9o/zhw161/cs131/01/01-adder'

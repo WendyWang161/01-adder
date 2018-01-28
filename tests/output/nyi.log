@@ -1,7 +1,0 @@
-make[1]: Entering directory `/home/linux/ieng6/oce/9o/zhw161/cs131/01/01-adder'
-stack exec -- adder tests/input/nyi.adder > tests/output/nyi.s
-nasm -f aout -o tests/output/nyi.o tests/output/nyi.s
-clang  -g -m32 -o tests/output/nyi.run c-bits/main.c tests/output/nyi.o
-tests/output/nyi.run > tests/output/nyi.result
-rm tests/output/nyi.run tests/output/nyi.o tests/output/nyi.s
-make[1]: Leaving directory `/home/linux/ieng6/oce/9o/zhw161/cs131/01/01-adder'
